@@ -1,0 +1,29 @@
+version: '2'
+services:
+    nginx:
+        depends_on:
+            - mysql
+            - redis
+        image: lnp:web
+        volumes:
+            - /your/path/www:/data/www   #放你的代码,配置文件里涉及到mysql和redis IP，只需要写redis或者mysql
+            - /your/path/conf:/usr/local/websoft/openresty/nginx/conf/vhost #放你的nginx配置文件
+        restart: always
+        ports:
+            - "81:80"  #你的nginx端口
+        container_name: web   
+    redis:
+        image: redis:4-alpine
+        restart: always
+        container_name: redis
+    mysql:
+        image: mysql:5.7
+        volumes:
+            - /your/path/mysql/data:/var/lib/mysql
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+        container_name: mysql
+
